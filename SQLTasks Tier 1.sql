@@ -177,6 +177,17 @@ QUESTIONS:
 The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
 
+A:
+
+  SELECT name, SUM(revenue) as total_rev  
+        FROM (SELECT name, case when memid = 0 then slots * guestcost 
+                    else slots * membercost end as revenue
+             from Bookings as b
+             LEFT JOIN Facilities as f
+             ON b.facid = f.facid)as sub
+         group by name
+         having total_rev < 1000
+         order by total_rev;    
 
 
 /* Q11: Produce a report of members and who recommended them in alphabetic surname,firstname order */
